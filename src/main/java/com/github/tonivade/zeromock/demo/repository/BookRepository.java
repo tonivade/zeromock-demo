@@ -1,10 +1,10 @@
 package com.github.tonivade.zeromock.demo.repository;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.StreamSupport.stream;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ public class BookRepository {
   private BookDAO dao;
 
   public List<Book> findAll() {
-    return StreamSupport.stream(dao.findAll().spliterator(), false).map(this::convert).collect(toList());
+    return stream(dao.findAll().spliterator(), false).map(this::convert).collect(toList());
   }
 
   public Optional<Book> findById(Integer id) {
