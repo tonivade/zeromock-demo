@@ -11,8 +11,16 @@ public class Book {
   private final String title;
 
   public Book(Integer id, String title) {
-    this.id = requireNonNull(id);
+    this.id = id;
     this.title = requireNonNull(title);
+  }
+
+  public Integer id() {
+    return id;
+  }
+
+  public String title() {
+    return title;
   }
   
   @Override

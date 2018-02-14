@@ -28,8 +28,8 @@ public class BookRepository {
     return dao.findById(id).map(this::convert);
   }
 
-  public Book create(String title) {
-    return convert(dao.save(new BookEntity(null, title)));
+  public Book save(Book book) {
+    return convert(dao.save(convert(book)));
   }
 
   public Book update(Integer id, String title) {
@@ -38,6 +38,10 @@ public class BookRepository {
 
   public void delete(Integer id) {
     dao.deleteById(id);
+  }
+  
+  private BookEntity convert(Book book) {
+    return new BookEntity(book.id(), book.title());
   }
   
   private Book convert(BookEntity entity) {

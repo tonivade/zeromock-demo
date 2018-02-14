@@ -26,11 +26,11 @@ public class BooksService {
   }
 
   public Book create(String title) {
-    return repository.create(title);
+    return repository.save(new Book(null, title));
   }
 
   public Book update(Integer id, String title) {
-    return repository.update(id, title);
+    return repository.save(new Book(id, title));
   }
 
   public void delete(Integer id) {
