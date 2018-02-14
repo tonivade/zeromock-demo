@@ -19,6 +19,6 @@ The reason for implement a new http mock library was simple. The existing altern
 
 ```
 
-The API is implemented using functions and chaining then using function composition. I think is clear and easy to read.
+The API is implemented using functions and chaining them using function composition. I think is clear and easy to read.
 
-So, this project is an POC of a rest API implemented using my mock library. Right now, obviously, it's not production ready, but I'm very exited about this project. You don't need a servlet container, it's not coupled with nothing, you can integrate it where you want.
+So, this project is an POC of a rest API implemented using my mock library. Right now, obviously, it's not production ready, but I'm very exited about this project. You don't need a servlet container, it's not coupled with nothing, you can integrate it wherever you want, spring, spring-boot, guice, even java ee.
