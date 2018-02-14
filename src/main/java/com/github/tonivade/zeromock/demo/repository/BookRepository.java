@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.github.tonivade.zeromock.demo.service.Book;
+import com.github.tonivade.zeromock.demo.domain.Book;
 
 @Component
 public class BookRepository {

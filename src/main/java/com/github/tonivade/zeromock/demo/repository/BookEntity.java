@@ -1,7 +1,5 @@
 package com.github.tonivade.zeromock.demo.repository;
 
-import static java.util.Objects.requireNonNull;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,12 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table
+@Table(name = "book")
 @Entity
 public class BookEntity {
-  @Column
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column
   private Integer id;
   @Column
   private String title;
@@ -23,7 +21,7 @@ public class BookEntity {
 
   public BookEntity(Integer id, String title) {
     this.id = id;
-    setTitle(title);
+    this.title = title;
   }
 
   public Integer getId() {
@@ -35,10 +33,10 @@ public class BookEntity {
   }
 
   protected void setId(Integer id) {
-    this.id = requireNonNull(id);
+    this.id = id;
   }
 
   protected void setTitle(String title) {
-    this.title = requireNonNull(title);
+    this.title = title;
   }
 }

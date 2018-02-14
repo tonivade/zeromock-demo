@@ -1,12 +1,14 @@
-package com.github.tonivade.zeromock.demo.service;
+package com.github.tonivade.zeromock.demo.domain;
+
+import static java.util.Objects.requireNonNull;
 
 public class Book {
   private final Integer id;
   private final String title;
 
   public Book(Integer id, String title) {
-    this.id = id;
-    this.title = title;
+    this.id = requireNonNull(id);
+    this.title = requireNonNull(title);
   }
   
   @Override

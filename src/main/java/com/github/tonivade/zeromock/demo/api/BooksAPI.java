@@ -20,8 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.github.tonivade.zeromock.HttpRequest;
-import com.github.tonivade.zeromock.demo.service.Book;
-import com.github.tonivade.zeromock.demo.service.BooksService;
+import com.github.tonivade.zeromock.demo.domain.Book;
+import com.github.tonivade.zeromock.demo.domain.BooksService;
 
 @Component
 public class BooksAPI {
