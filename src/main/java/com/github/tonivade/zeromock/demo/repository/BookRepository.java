@@ -1,8 +1,10 @@
 package com.github.tonivade.zeromock.demo.repository;
 
-import java.util.LinkedList;
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,11 +17,7 @@ public class BookRepository {
   private BookDAO dao;
 
   public List<Book> findAll() {
-    List<Book> result = new LinkedList<>();
-    for (BookEntity bookEntity : dao.findAll()) {
-      result.add(convert(bookEntity));
-    }
-    return result;
+    return StreamSupport.stream(dao.findAll().spliterator(), false).map(this::convert).collect(toList());
   }
 
   public Optional<Book> findById(Integer id) {
