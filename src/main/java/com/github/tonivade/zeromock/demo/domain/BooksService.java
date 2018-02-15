@@ -7,15 +7,13 @@ package com.github.tonivade.zeromock.demo.domain;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.github.tonivade.zeromock.demo.repository.BookRepository;
-
-@Component
 public class BooksService {
-  @Autowired
-  private BookRepository repository;
+  
+  private final BookRepository repository;
+  
+  public BooksService(BookRepository repository) {
+    this.repository = repository;
+  }
 
   public List<Book> findAll() {
     return repository.findAll();

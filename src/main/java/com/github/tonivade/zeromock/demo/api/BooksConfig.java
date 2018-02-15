@@ -16,9 +16,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.github.tonivade.zeromock.HttpService;
+import com.github.tonivade.zeromock.demo.domain.BookRepository;
+import com.github.tonivade.zeromock.demo.domain.BooksService;
 
 @Configuration
 public class BooksConfig {
+  @Bean
+  public BooksService booksService(BookRepository repository) {
+    return new BooksService(repository);
+  }
+  
+  @Bean
+  public BooksAPI booksApi(BooksService service) {
+    return new BooksAPI(service);
+  }
+  
   @Bean
   public HttpService books(BooksAPI books) {
     return new HttpService("books")

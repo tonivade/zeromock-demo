@@ -16,17 +16,16 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.github.tonivade.zeromock.HttpRequest;
 import com.github.tonivade.zeromock.demo.domain.Book;
 import com.github.tonivade.zeromock.demo.domain.BooksService;
 
-@Component
 public class BooksAPI {
-  @Autowired
-  private BooksService service;
+  private final BooksService service;
+  
+  public BooksAPI(BooksService service) {
+    this.service = service;
+  }
 
   public Supplier<Object> findAll() {
     return service::findAll;
