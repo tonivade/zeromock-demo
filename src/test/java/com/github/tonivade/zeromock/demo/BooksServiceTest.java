@@ -8,6 +8,7 @@ import static com.github.tonivade.zeromock.Requests.delete;
 import static com.github.tonivade.zeromock.Requests.get;
 import static com.github.tonivade.zeromock.Requests.post;
 import static com.github.tonivade.zeromock.Requests.put;
+import static com.github.tonivade.zeromock.Serializers.json;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
@@ -74,7 +75,7 @@ public class BooksServiceTest {
   public void createsBook() {
     HttpClient client = new HttpClient(STORE_URL);
     
-    HttpResponse response = client.request(post("/books").withBody("create"));
+    HttpResponse response = client.request(post("/books").withBody(asJson(new Book(null, "create"))));
     
     assertEquals(HttpStatus.CREATED, response.status());
     assertEquals(new Book(1, "create"), asBook(response.body()));
@@ -88,7 +89,7 @@ public class BooksServiceTest {
     HttpResponse response = client.request(delete("/books/1"));
     
     assertEquals(HttpStatus.OK, response.status());
-    assertEquals(null, asBook(response.body()));
+    assertEquals(null, response.body());
   }
   
   @Test
@@ -96,10 +97,14 @@ public class BooksServiceTest {
   public void updatesBook() {
     HttpClient client = new HttpClient(STORE_URL);
     
-    HttpResponse response = client.request(put("/books/1").withBody("update"));
+    HttpResponse response = client.request(put("/books/1").withBody(asJson(new Book(null, "update"))));
     
     assertEquals(HttpStatus.OK, response.status());
     assertEquals(new Book(1, "update"), asBook(response.body()));
+  }
+
+  private ByteBuffer asJson(Book book) {
+    return json().apply(book);
   }
 
   private Book asBook(ByteBuffer body) {
