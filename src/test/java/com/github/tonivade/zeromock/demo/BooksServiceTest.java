@@ -48,6 +48,17 @@ public class BooksServiceTest {
   }
   
   @Test
+  @Sql(statements = { DELETE_FROM_BOOK})
+  public void findsBookNotFound() {
+    HttpClient client = new HttpClient(STORE_URL);
+    
+    HttpResponse response = client.request(get("/books/1"));
+    
+    assertEquals(HttpStatus.NO_CONTENT, response.status());
+    assertEquals(null, response.body());
+  }
+  
+  @Test
   @Sql(statements = { DELETE_FROM_BOOK, INSERT_INTO_BOOK})
   public void findsBook() {
     HttpClient client = new HttpClient(STORE_URL);

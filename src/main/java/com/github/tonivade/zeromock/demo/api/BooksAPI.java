@@ -66,7 +66,7 @@ public class BooksAPI {
   }
 
   private static <T> Function<HttpRequest, HttpResponse> okOrNoContentJson(Function<HttpRequest, Optional<T>> handler) {
-    return handler.andThen(map(json())).andThen(map(Responses::ok)).andThen(orElse(Responses::noContent));
+    return handler.andThen(map(json())).andThen(map(Responses::ok)).andThen(orElse(Responses::noContent)).andThen(contentJson());
   }
 
   private static <T> Function<HttpRequest, HttpResponse> createdJson(Function<HttpRequest, T> handler) {
