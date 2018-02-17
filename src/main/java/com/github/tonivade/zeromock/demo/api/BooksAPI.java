@@ -8,16 +8,22 @@ import static com.github.tonivade.zeromock.Extractors.asInteger;
 import static com.github.tonivade.zeromock.Extractors.asString;
 import static com.github.tonivade.zeromock.Extractors.body;
 import static com.github.tonivade.zeromock.Extractors.pathParam;
+import static com.github.tonivade.zeromock.Handlers.contentJson;
+import static com.github.tonivade.zeromock.Handlers.created;
 import static com.github.tonivade.zeromock.Handlers.force;
 import static com.github.tonivade.zeromock.Handlers.join;
+import static com.github.tonivade.zeromock.Handlers.map;
+import static com.github.tonivade.zeromock.Handlers.ok;
+import static com.github.tonivade.zeromock.Handlers.orElse;
 import static com.github.tonivade.zeromock.Handlers.split;
+import static com.github.tonivade.zeromock.Serializers.json;
 
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import com.github.tonivade.zeromock.HttpRequest;
-import com.github.tonivade.zeromock.demo.domain.Book;
+import com.github.tonivade.zeromock.HttpResponse;
+import com.github.tonivade.zeromock.Responses;
 import com.github.tonivade.zeromock.demo.domain.BooksService;
 
 public class BooksAPI {
@@ -27,24 +33,24 @@ public class BooksAPI {
     this.service = service;
   }
 
-  public Supplier<Object> findAll() {
-    return service::findAll;
+  public Function<HttpRequest, HttpResponse> findAll() {
+    return okJson(force(service::findAll));
   }
 
-  public Function<HttpRequest, Book> update() {
-    return join(getBookId(), getBookTitle()).andThen(split(service::update));
+  public Function<HttpRequest, HttpResponse> update() {
+    return okJson(join(getBookId(), getBookTitle()).andThen(split(service::update)));
   }
 
-  public Function<HttpRequest, Optional<Book>> find() {
-    return getBookId().andThen(service::find);
+  public Function<HttpRequest, HttpResponse> find() {
+    return okOrNoContentJson(getBookId().andThen(service::find));
   }
 
-  public Function<HttpRequest, Book> create() {
-    return body().andThen(asString()).andThen(service::create);
+  public Function<HttpRequest, HttpResponse> create() {
+    return createdJson(getBookTitle().andThen(service::create));
   }
 
-  public Function<HttpRequest, Void> delete() {
-    return getBookId().andThen(force(service::delete));
+  public Function<HttpRequest, HttpResponse> delete() {
+    return okJson(getBookId().andThen(force(service::delete)));
   }
 
   private static Function<HttpRequest, Integer> getBookId() {
@@ -53,5 +59,17 @@ public class BooksAPI {
 
   private static Function<HttpRequest, String> getBookTitle() {
     return body().andThen(asString());
+  }
+  
+  private static <T> Function<HttpRequest, HttpResponse> okJson(Function<HttpRequest, T> handler) {
+    return ok(handler.andThen(json())).andThen(contentJson());
+  }
+
+  private static <T> Function<HttpRequest, HttpResponse> okOrNoContentJson(Function<HttpRequest, Optional<T>> handler) {
+    return handler.andThen(map(json())).andThen(map(Responses::ok)).andThen(orElse(Responses::noContent));
+  }
+
+  private static <T> Function<HttpRequest, HttpResponse> createdJson(Function<HttpRequest, T> handler) {
+    return created(handler.andThen(json())).andThen(contentJson());
   }
 }
