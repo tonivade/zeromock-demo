@@ -4,6 +4,7 @@
  */
 package com.github.tonivade.zeromock.demo;
 
+import static com.github.tonivade.zeromock.Bytes.asString;
 import static com.github.tonivade.zeromock.Requests.delete;
 import static com.github.tonivade.zeromock.Requests.get;
 import static com.github.tonivade.zeromock.Requests.post;
@@ -56,7 +57,7 @@ public class BooksServiceTest {
     HttpResponse response = client.request(get("/books/1"));
     
     assertEquals(HttpStatus.NO_CONTENT, response.status());
-    assertEquals(null, response.body());
+    assertEquals("", asString(response.body()));
   }
   
   @Test
@@ -89,7 +90,7 @@ public class BooksServiceTest {
     HttpResponse response = client.request(delete("/books/1"));
     
     assertEquals(HttpStatus.OK, response.status());
-    assertEquals(null, response.body());
+    assertEquals("", asString(response.body()));
   }
   
   @Test
