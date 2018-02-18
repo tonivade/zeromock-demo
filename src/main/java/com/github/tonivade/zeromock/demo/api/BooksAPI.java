@@ -17,10 +17,10 @@ import static com.github.tonivade.zeromock.Handlers.orElse;
 import static com.github.tonivade.zeromock.Handlers.split;
 import static com.github.tonivade.zeromock.Serializers.json;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.function.Function;
 
+import com.github.tonivade.zeromock.Bytes;
 import com.github.tonivade.zeromock.Deserializers;
 import com.github.tonivade.zeromock.HttpRequest;
 import com.github.tonivade.zeromock.HttpResponse;
@@ -78,7 +78,7 @@ public class BooksAPI {
     return created(handler.andThen(json())).andThen(contentJson());
   }
 
-  private static Function<ByteBuffer, Book> asBook() {
+  private static Function<Bytes, Book> asBook() {
     return Deserializers.<Book>json(Book.class);
   }
 }

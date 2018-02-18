@@ -14,7 +14,6 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Type;
-import java.nio.ByteBuffer;
 import java.util.List;
 
 import org.junit.Test;
@@ -23,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.github.tonivade.zeromock.Bytes;
 import com.github.tonivade.zeromock.Deserializers;
 import com.github.tonivade.zeromock.HttpClient;
 import com.github.tonivade.zeromock.HttpResponse;
@@ -104,15 +104,15 @@ public class BooksServiceTest {
     assertEquals(new Book(1, "update"), asBook(response.body()));
   }
 
-  private ByteBuffer asJson(Book book) {
+  private Bytes asJson(Book book) {
     return json().apply(book);
   }
 
-  private Book asBook(ByteBuffer body) {
+  private Book asBook(Bytes body) {
     return Deserializers.<Book>json(Book.class).apply(body);
   }
 
-  private List<Book> asBooks(ByteBuffer body) {
+  private List<Book> asBooks(Bytes body) {
     return Deserializers.<List<Book>>json(listOfBooks()).apply(body);
   }
   
