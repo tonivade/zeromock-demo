@@ -4,27 +4,27 @@
  */
 package com.github.tonivade.zeromock.demo.api;
 
-import static com.github.tonivade.zeromock.Extractors.asInteger;
-import static com.github.tonivade.zeromock.Extractors.body;
-import static com.github.tonivade.zeromock.Extractors.pathParam;
-import static com.github.tonivade.zeromock.Handlers.contentJson;
-import static com.github.tonivade.zeromock.Handlers.created;
-import static com.github.tonivade.zeromock.Handlers.force;
-import static com.github.tonivade.zeromock.Handlers.join;
-import static com.github.tonivade.zeromock.Handlers.map;
-import static com.github.tonivade.zeromock.Handlers.ok;
-import static com.github.tonivade.zeromock.Handlers.orElse;
-import static com.github.tonivade.zeromock.Handlers.split;
-import static com.github.tonivade.zeromock.Serializers.json;
+import static com.github.tonivade.zeromock.core.Extractors.asInteger;
+import static com.github.tonivade.zeromock.core.Extractors.body;
+import static com.github.tonivade.zeromock.core.Extractors.pathParam;
+import static com.github.tonivade.zeromock.core.Handlers.contentJson;
+import static com.github.tonivade.zeromock.core.Handlers.created;
+import static com.github.tonivade.zeromock.core.Combinators.force;
+import static com.github.tonivade.zeromock.core.Combinators.join;
+import static com.github.tonivade.zeromock.core.Combinators.map;
+import static com.github.tonivade.zeromock.core.Handlers.ok;
+import static com.github.tonivade.zeromock.core.Combinators.orElse;
+import static com.github.tonivade.zeromock.core.Combinators.split;
+import static com.github.tonivade.zeromock.core.Serializers.json;
 
 import java.util.Optional;
 import java.util.function.Function;
 
-import com.github.tonivade.zeromock.Bytes;
-import com.github.tonivade.zeromock.Deserializers;
-import com.github.tonivade.zeromock.HttpRequest;
-import com.github.tonivade.zeromock.HttpResponse;
-import com.github.tonivade.zeromock.Responses;
+import com.github.tonivade.zeromock.core.Bytes;
+import com.github.tonivade.zeromock.core.Deserializers;
+import com.github.tonivade.zeromock.core.HttpRequest;
+import com.github.tonivade.zeromock.core.HttpResponse;
+import com.github.tonivade.zeromock.core.Responses;
 import com.github.tonivade.zeromock.demo.domain.Book;
 import com.github.tonivade.zeromock.demo.domain.BooksService;
 

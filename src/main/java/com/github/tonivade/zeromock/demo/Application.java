@@ -4,14 +4,14 @@
  */
 package com.github.tonivade.zeromock.demo;
 
-import static com.github.tonivade.zeromock.MockHttpServer.listenAt;
+import static com.github.tonivade.zeromock.server.MockHttpServer.listenAt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.github.tonivade.zeromock.HttpService;
-import com.github.tonivade.zeromock.MockHttpServer;
+import com.github.tonivade.zeromock.core.HttpService;
+import com.github.tonivade.zeromock.server.MockHttpServer;
 
 @SpringBootApplication
 public class Application {

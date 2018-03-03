@@ -4,12 +4,11 @@
  */
 package com.github.tonivade.zeromock.demo;
 
-import static com.github.tonivade.zeromock.Bytes.asString;
-import static com.github.tonivade.zeromock.Requests.delete;
-import static com.github.tonivade.zeromock.Requests.get;
-import static com.github.tonivade.zeromock.Requests.post;
-import static com.github.tonivade.zeromock.Requests.put;
-import static com.github.tonivade.zeromock.Serializers.json;
+import static com.github.tonivade.zeromock.core.Bytes.asString;
+import static com.github.tonivade.zeromock.core.Requests.delete;
+import static com.github.tonivade.zeromock.core.Requests.get;
+import static com.github.tonivade.zeromock.core.Requests.post;
+import static com.github.tonivade.zeromock.core.Requests.put;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
@@ -22,12 +21,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.github.tonivade.zeromock.Bytes;
-import com.github.tonivade.zeromock.Deserializers;
-import com.github.tonivade.zeromock.HttpClient;
-import com.github.tonivade.zeromock.HttpResponse;
-import com.github.tonivade.zeromock.HttpStatus;
+import com.github.tonivade.zeromock.core.Bytes;
+import com.github.tonivade.zeromock.core.Deserializers;
+import com.github.tonivade.zeromock.core.HttpResponse;
+import com.github.tonivade.zeromock.core.HttpStatus;
+import com.github.tonivade.zeromock.core.Serializers;
 import com.github.tonivade.zeromock.demo.domain.Book;
+import com.github.tonivade.zeromock.server.HttpClient;
 import com.google.gson.reflect.TypeToken;
 
 @RunWith(SpringRunner.class)
@@ -105,11 +105,11 @@ public class BooksServiceTest {
   }
 
   private Bytes asJson(Book book) {
-    return json().apply(book);
+    return Serializers.json().apply(book);
   }
 
   private Book asBook(Bytes body) {
-    return Deserializers.<Book>json(Book.class).apply(body);
+    return Deserializers.json(Book.class).apply(body);
   }
 
   private List<Book> asBooks(Bytes body) {
