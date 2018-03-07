@@ -4,17 +4,17 @@
  */
 package com.github.tonivade.zeromock.demo.api;
 
-import static com.github.tonivade.zeromock.core.Extractors.asInteger;
-import static com.github.tonivade.zeromock.core.Extractors.body;
-import static com.github.tonivade.zeromock.core.Extractors.pathParam;
-import static com.github.tonivade.zeromock.core.Handlers.contentJson;
-import static com.github.tonivade.zeromock.core.Handlers.created;
 import static com.github.tonivade.zeromock.core.Combinators.force;
 import static com.github.tonivade.zeromock.core.Combinators.join;
 import static com.github.tonivade.zeromock.core.Combinators.map;
-import static com.github.tonivade.zeromock.core.Handlers.ok;
 import static com.github.tonivade.zeromock.core.Combinators.orElse;
 import static com.github.tonivade.zeromock.core.Combinators.split;
+import static com.github.tonivade.zeromock.core.Extractors.asInteger;
+import static com.github.tonivade.zeromock.core.Extractors.body;
+import static com.github.tonivade.zeromock.core.Extractors.pathParam;
+import static com.github.tonivade.zeromock.core.Handlers.created;
+import static com.github.tonivade.zeromock.core.Handlers.ok;
+import static com.github.tonivade.zeromock.core.Headers.contentJson;
 import static com.github.tonivade.zeromock.core.Serializers.json;
 
 import java.util.Optional;

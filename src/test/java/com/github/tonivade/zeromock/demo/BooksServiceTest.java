@@ -9,6 +9,7 @@ import static com.github.tonivade.zeromock.core.Requests.delete;
 import static com.github.tonivade.zeromock.core.Requests.get;
 import static com.github.tonivade.zeromock.core.Requests.post;
 import static com.github.tonivade.zeromock.core.Requests.put;
+import static com.github.tonivade.zeromock.server.HttpClient.connectTo;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
@@ -27,7 +28,6 @@ import com.github.tonivade.zeromock.core.HttpResponse;
 import com.github.tonivade.zeromock.core.HttpStatus;
 import com.github.tonivade.zeromock.core.Serializers;
 import com.github.tonivade.zeromock.demo.domain.Book;
-import com.github.tonivade.zeromock.server.HttpClient;
 import com.google.gson.reflect.TypeToken;
 
 @RunWith(SpringRunner.class)
@@ -41,9 +41,7 @@ public class BooksServiceTest {
   @Test
   @Sql(statements = { DELETE_FROM_BOOK, INSERT_INTO_BOOK})
   public void findsBooks() {
-    HttpClient client = new HttpClient(STORE_URL);
-    
-    HttpResponse response = client.request(get("/books"));
+    HttpResponse response = connectTo(STORE_URL).request(get("/books"));
     
     assertEquals(HttpStatus.OK, response.status());
     assertEquals(asList(new Book(1, "title")), asBooks(response.body()));
@@ -52,9 +50,7 @@ public class BooksServiceTest {
   @Test
   @Sql(statements = { DELETE_FROM_BOOK})
   public void findsBookNotFound() {
-    HttpClient client = new HttpClient(STORE_URL);
-    
-    HttpResponse response = client.request(get("/books/1"));
+    HttpResponse response = connectTo(STORE_URL).request(get("/books/1"));
     
     assertEquals(HttpStatus.NO_CONTENT, response.status());
     assertEquals("", asString(response.body()));
@@ -63,9 +59,7 @@ public class BooksServiceTest {
   @Test
   @Sql(statements = { DELETE_FROM_BOOK, INSERT_INTO_BOOK})
   public void findsBook() {
-    HttpClient client = new HttpClient(STORE_URL);
-    
-    HttpResponse response = client.request(get("/books/1"));
+    HttpResponse response = connectTo(STORE_URL).request(get("/books/1"));
     
     assertEquals(HttpStatus.OK, response.status());
     assertEquals(new Book(1, "title"), asBook(response.body()));
@@ -74,9 +68,7 @@ public class BooksServiceTest {
   @Test
   @Sql(statements = DELETE_FROM_BOOK)
   public void createsBook() {
-    HttpClient client = new HttpClient(STORE_URL);
-    
-    HttpResponse response = client.request(post("/books").withBody(asJson(new Book(null, "create"))));
+    HttpResponse response = connectTo(STORE_URL).request(post("/books").withBody(asJson(new Book(null, "create"))));
     
     assertEquals(HttpStatus.CREATED, response.status());
     assertEquals(new Book(1, "create"), asBook(response.body()));
@@ -85,9 +77,7 @@ public class BooksServiceTest {
   @Test
   @Sql(statements = { DELETE_FROM_BOOK, INSERT_INTO_BOOK})
   public void deletesBook() {
-    HttpClient client = new HttpClient(STORE_URL);
-    
-    HttpResponse response = client.request(delete("/books/1"));
+    HttpResponse response = connectTo(STORE_URL).request(delete("/books/1"));
     
     assertEquals(HttpStatus.OK, response.status());
     assertEquals("", asString(response.body()));
@@ -96,9 +86,7 @@ public class BooksServiceTest {
   @Test
   @Sql(statements = { DELETE_FROM_BOOK, INSERT_INTO_BOOK})
   public void updatesBook() {
-    HttpClient client = new HttpClient(STORE_URL);
-    
-    HttpResponse response = client.request(put("/books/1").withBody(asJson(new Book(null, "update"))));
+    HttpResponse response = connectTo(STORE_URL).request(put("/books/1").withBody(asJson(new Book(null, "update"))));
     
     assertEquals(HttpStatus.OK, response.status());
     assertEquals(new Book(1, "update"), asBook(response.body()));
