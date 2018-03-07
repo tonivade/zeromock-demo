@@ -6,7 +6,6 @@ package com.github.tonivade.zeromock.demo.api;
 
 import static com.github.tonivade.zeromock.core.Combinators.force;
 import static com.github.tonivade.zeromock.core.Combinators.join;
-import static com.github.tonivade.zeromock.core.Combinators.lift;
 import static com.github.tonivade.zeromock.core.Combinators.map;
 import static com.github.tonivade.zeromock.core.Combinators.orElse;
 import static com.github.tonivade.zeromock.core.Combinators.split;
@@ -36,23 +35,23 @@ public class BooksAPI {
     this.service = service;
   }
 
-  public Function<HttpRequest, Optional<HttpResponse>> findAll() {
+  public Function<HttpRequest, HttpResponse> findAll() {
     return okJson(force(service::findAll));
   }
 
-  public Function<HttpRequest, Optional<HttpResponse>> update() {
+  public Function<HttpRequest, HttpResponse> update() {
     return okJson(join(getBookId(), getBookTitle()).andThen(split(service::update)));
   }
 
-  public Function<HttpRequest, Optional<HttpResponse>> find() {
+  public Function<HttpRequest, HttpResponse> find() {
     return okOrNoContentJson(getBookId().andThen(service::find));
   }
 
-  public Function<HttpRequest, Optional<HttpResponse>> create() {
+  public Function<HttpRequest, HttpResponse> create() {
     return createdJson(getBookTitle().andThen(service::create));
   }
 
-  public Function<HttpRequest, Optional<HttpResponse>> delete() {
+  public Function<HttpRequest, HttpResponse> delete() {
     return getBookId().andThen(force(service::delete)).andThen(ok());
   }
 
@@ -64,20 +63,19 @@ public class BooksAPI {
     return body().andThen(asBook()).andThen(Book::title);
   }
   
-  private static <T> Function<HttpRequest, Optional<HttpResponse>> okJson(Function<HttpRequest, T> handler) {
-    return ok(handler.andThen(json())).andThen(map(contentJson()));
+  private static <T> Function<HttpRequest, HttpResponse> okJson(Function<HttpRequest, T> handler) {
+    return ok(handler.andThen(json())).andThen(contentJson());
   }
 
-  private static <T> Function<HttpRequest, Optional<HttpResponse>> okOrNoContentJson(Function<HttpRequest, Optional<T>> handler) {
+  private static <T> Function<HttpRequest, HttpResponse> okOrNoContentJson(Function<HttpRequest, Optional<T>> handler) {
     return handler.andThen(map(json()))
         .andThen(map(Responses::ok))
         .andThen(orElse(Responses::noContent))
-        .andThen(contentJson())
-        .andThen(lift());
+        .andThen(contentJson());
   }
 
-  private static <T> Function<HttpRequest, Optional<HttpResponse>> createdJson(Function<HttpRequest, T> handler) {
-    return created(handler.andThen(json())).andThen(map(contentJson()));
+  private static <T> Function<HttpRequest, HttpResponse> createdJson(Function<HttpRequest, T> handler) {
+    return created(handler.andThen(json())).andThen(contentJson());
   }
 
   private static Function<Bytes, Book> asBook() {
