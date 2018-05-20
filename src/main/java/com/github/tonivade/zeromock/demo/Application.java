@@ -10,7 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.github.tonivade.zeromock.core.HttpService;
+import com.github.tonivade.zeromock.api.HttpService;
 import com.github.tonivade.zeromock.server.MockHttpServer;
 
 @SpringBootApplication

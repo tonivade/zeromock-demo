@@ -42,8 +42,9 @@ public class BookSpringDataRepository implements BookRepository {
   }
 
   @Override
-  public void delete(Integer id) {
+  public Void delete(Integer id) {
     dao.deleteById(id);
+    return null;
   }
   
   private BookEntity convert(Book book) {

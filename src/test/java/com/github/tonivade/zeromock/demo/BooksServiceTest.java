@@ -4,11 +4,11 @@
  */
 package com.github.tonivade.zeromock.demo;
 
-import static com.github.tonivade.zeromock.core.Bytes.asString;
-import static com.github.tonivade.zeromock.core.Requests.delete;
-import static com.github.tonivade.zeromock.core.Requests.get;
-import static com.github.tonivade.zeromock.core.Requests.post;
-import static com.github.tonivade.zeromock.core.Requests.put;
+import static com.github.tonivade.zeromock.api.Bytes.asString;
+import static com.github.tonivade.zeromock.api.Requests.delete;
+import static com.github.tonivade.zeromock.api.Requests.get;
+import static com.github.tonivade.zeromock.api.Requests.post;
+import static com.github.tonivade.zeromock.api.Requests.put;
 import static com.github.tonivade.zeromock.server.HttpClient.connectTo;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -22,11 +22,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.github.tonivade.zeromock.core.Bytes;
-import com.github.tonivade.zeromock.core.Deserializers;
-import com.github.tonivade.zeromock.core.HttpResponse;
-import com.github.tonivade.zeromock.core.HttpStatus;
-import com.github.tonivade.zeromock.core.Serializers;
+import com.github.tonivade.zeromock.api.Bytes;
+import com.github.tonivade.zeromock.api.Deserializers;
+import com.github.tonivade.zeromock.api.HttpResponse;
+import com.github.tonivade.zeromock.api.HttpStatus;
+import com.github.tonivade.zeromock.api.Serializers;
 import com.github.tonivade.zeromock.demo.domain.Book;
 import com.google.gson.reflect.TypeToken;
 
@@ -68,7 +68,8 @@ public class BooksServiceTest {
   @Test
   @Sql(statements = DELETE_FROM_BOOK)
   public void createsBook() {
-    HttpResponse response = connectTo(STORE_URL).request(post("/books").withBody(asJson(new Book(null, "create"))));
+    HttpResponse response = connectTo(STORE_URL)
+        .request(post("/books").withBody(asJson(new Book(null, "create"))));
     
     assertEquals(HttpStatus.CREATED, response.status());
     assertEquals(new Book(1, "create"), asBook(response.body()));
@@ -86,7 +87,8 @@ public class BooksServiceTest {
   @Test
   @Sql(statements = { DELETE_FROM_BOOK, INSERT_INTO_BOOK})
   public void updatesBook() {
-    HttpResponse response = connectTo(STORE_URL).request(put("/books/1").withBody(asJson(new Book(null, "update"))));
+    HttpResponse response = connectTo(STORE_URL)
+        .request(put("/books/1").withBody(asJson(new Book(null, "update"))));
     
     assertEquals(HttpStatus.OK, response.status());
     assertEquals(new Book(1, "update"), asBook(response.body()));

@@ -4,8 +4,11 @@
  */
 package com.github.tonivade.zeromock.demo.domain;
 
-import java.util.List;
-import java.util.Optional;
+import com.github.tonivade.zeromock.core.Handler2;
+import com.github.tonivade.zeromock.core.OptionalHandler;
+import com.github.tonivade.zeromock.core.StreamHandler;
+import com.github.tonivade.zeromock.core.Try;
+import com.github.tonivade.zeromock.core.TryHandler;
 
 public class BooksService {
   
@@ -15,23 +18,23 @@ public class BooksService {
     this.repository = repository;
   }
 
-  public List<Book> findAll() {
-    return repository.findAll();
+  public <T> StreamHandler<T, Book> findAll() {
+    return ignore -> repository.findAll().stream();
   }
 
-  public Optional<Book> find(Integer id) {
-    return repository.findById(id);
+  public OptionalHandler<Integer, Book> find() {
+    return id -> repository.findById(id);
   }
 
-  public Book create(String title) {
-    return repository.save(new Book(null, title));
+  public TryHandler<String, Book> create() {
+    return title -> Try.of(() -> repository.save(new Book(null, title)));
   }
 
-  public Book update(Integer id, String title) {
-    return repository.save(new Book(id, title));
+  public Handler2<Integer, String, Try<Book>> update() {
+    return (id, title) -> Try.of(() -> repository.save(new Book(id, title)));
   }
 
-  public void delete(Integer id) {
-    repository.delete(id);
+  public TryHandler<Integer, Void> delete() {
+    return id -> Try.<Void>of(() -> repository.delete(id));
   }
 }
