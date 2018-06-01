@@ -4,18 +4,18 @@
  */
 package com.github.tonivade.zeromock.demo.domain;
 
-import java.util.List;
-import java.util.Optional;
+import com.github.tonivade.zeromock.core.InmutableList;
+import com.github.tonivade.zeromock.core.Option;
 
 public interface BookRepository {
 
-  List<Book> findAll();
+  InmutableList<Book> findAll();
 
-  Optional<Book> findById(Integer id);
+  Option<Book> findById(Integer id);
 
   Book save(Book book);
 
   Book update(Integer id, String title);
 
-  Void delete(Integer id);
+  void delete(Integer id);
 }

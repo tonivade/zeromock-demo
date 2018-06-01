@@ -4,15 +4,13 @@
  */
 package com.github.tonivade.zeromock.demo.repository;
 
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
-
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.github.tonivade.zeromock.core.InmutableList;
+import com.github.tonivade.zeromock.core.Option;
 import com.github.tonivade.zeromock.demo.domain.Book;
 import com.github.tonivade.zeromock.demo.domain.BookRepository;
 
@@ -22,13 +20,13 @@ public class BookSpringDataRepository implements BookRepository {
   private BookDAO dao;
 
   @Override
-  public List<Book> findAll() {
-    return stream(dao.findAll().spliterator(), false).map(this::convert).collect(toList());
+  public InmutableList<Book> findAll() {
+    return InmutableList.from(stream(dao.findAll().spliterator(), false).map(this::convert));
   }
 
   @Override
-  public Optional<Book> findById(Integer id) {
-    return dao.findById(id).map(this::convert);
+  public Option<Book> findById(Integer id) {
+    return Option.from(dao.findById(id).map(this::convert));
   }
 
   @Override
@@ -42,9 +40,8 @@ public class BookSpringDataRepository implements BookRepository {
   }
 
   @Override
-  public Void delete(Integer id) {
+  public void delete(Integer id) {
     dao.deleteById(id);
-    return null;
   }
   
   private BookEntity convert(Book book) {

@@ -4,8 +4,8 @@
  */
 package com.github.tonivade.zeromock.demo.domain;
 
-import java.util.List;
-import java.util.Optional;
+import com.github.tonivade.zeromock.core.InmutableList;
+import com.github.tonivade.zeromock.core.Option;
 
 public class BooksService {
   
@@ -15,11 +15,11 @@ public class BooksService {
     this.repository = repository;
   }
 
-  public List<Book> findAll() {
+  public InmutableList<Book> findAll() {
     return repository.findAll();
   }
 
-  public Optional<Book> find(Integer id) {
+  public Option<Book> find(Integer id) {
     return repository.findById(id);
   }
 

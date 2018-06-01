@@ -12,6 +12,7 @@ import static com.github.tonivade.zeromock.api.Serializers.empty;
 import static com.github.tonivade.zeromock.api.Serializers.json;
 import static com.github.tonivade.zeromock.core.Handler1.adapt;
 import static com.github.tonivade.zeromock.core.Handler2.adapt;
+import static com.github.tonivade.zeromock.core.OptionHandler.adapt;
 
 import com.github.tonivade.zeromock.api.Bytes;
 import com.github.tonivade.zeromock.api.Deserializers;
@@ -19,7 +20,7 @@ import com.github.tonivade.zeromock.api.HttpRequest;
 import com.github.tonivade.zeromock.api.RequestHandler;
 import com.github.tonivade.zeromock.api.Responses;
 import com.github.tonivade.zeromock.core.Handler1;
-import com.github.tonivade.zeromock.core.OptionalHandler;
+import com.github.tonivade.zeromock.core.InmutableList;
 import com.github.tonivade.zeromock.demo.domain.Book;
 import com.github.tonivade.zeromock.demo.domain.BooksService;
 
@@ -32,6 +33,7 @@ public class BooksAPI {
 
   public RequestHandler findAll() {
     return adapt(service::findAll)
+        .andThen(InmutableList::toList)
         .andThen(json())
         .andThen(Responses::ok)
         .andThen(contentJson())::handle;
@@ -47,8 +49,7 @@ public class BooksAPI {
   }
 
   public RequestHandler find() {
-    OptionalHandler<HttpRequest, Book> find = adapt(service::find).compose(getBookId())::handle;
-    return find
+    return adapt(adapt(service::find).compose(getBookId())::handle)
         .map(json())
         .map(Responses::ok)
         .orElse(Responses::noContent)
