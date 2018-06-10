@@ -32,6 +32,6 @@ repositories {
 dependencies {
   compile('org.springframework.boot:spring-boot-starter-data-jpa')
   compile('com.h2database:h2')
-  compile('com.github.tonivade:zeromock-server:0.7.0-SNAPSHOT')
+  compile('com.github.tonivade:zeromock-server:0.7.0')
   testCompile('org.springframework.boot:spring-boot-starter-test')
 }
