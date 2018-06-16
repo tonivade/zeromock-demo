@@ -4,12 +4,12 @@
  */
 package com.github.tonivade.zeromock.demo.domain;
 
-import com.github.tonivade.zeromock.core.InmutableList;
+import com.github.tonivade.zeromock.core.ImmutableList;
 import com.github.tonivade.zeromock.core.Option;
 
 public interface BookRepository {
 
-  InmutableList<Book> findAll();
+  ImmutableList<Book> findAll();
 
   Option<Book> findById(Integer id);
 

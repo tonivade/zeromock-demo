@@ -4,7 +4,7 @@
  */
 package com.github.tonivade.zeromock.demo.domain;
 
-import com.github.tonivade.zeromock.core.InmutableList;
+import com.github.tonivade.zeromock.core.ImmutableList;
 import com.github.tonivade.zeromock.core.Option;
 
 public class BooksService {
@@ -15,7 +15,7 @@ public class BooksService {
     this.repository = repository;
   }
 
-  public InmutableList<Book> findAll() {
+  public ImmutableList<Book> findAll() {
     return repository.findAll();
   }
 

@@ -95,15 +95,15 @@ public class BooksServiceTest {
   }
 
   private Bytes asJson(Book book) {
-    return Serializers.json().handle(book);
+    return Serializers.json().apply(book);
   }
 
   private Book asBook(Bytes body) {
-    return Deserializers.json(Book.class).handle(body);
+    return Deserializers.json(Book.class).apply(body);
   }
 
   private List<Book> asBooks(Bytes body) {
-    return Deserializers.<List<Book>>json(listOfBooks()).handle(body);
+    return Deserializers.<List<Book>>json(listOfBooks()).apply(body);
   }
   
   private Type listOfBooks() {

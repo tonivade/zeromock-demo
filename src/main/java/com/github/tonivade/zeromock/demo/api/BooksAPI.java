@@ -10,17 +10,18 @@ import static com.github.tonivade.zeromock.api.Extractors.pathParam;
 import static com.github.tonivade.zeromock.api.Headers.contentJson;
 import static com.github.tonivade.zeromock.api.Serializers.empty;
 import static com.github.tonivade.zeromock.api.Serializers.json;
-import static com.github.tonivade.zeromock.core.Handler1.adapt;
-import static com.github.tonivade.zeromock.core.Handler2.adapt;
-import static com.github.tonivade.zeromock.core.OptionHandler.adapt;
 
 import com.github.tonivade.zeromock.api.Bytes;
 import com.github.tonivade.zeromock.api.Deserializers;
 import com.github.tonivade.zeromock.api.HttpRequest;
 import com.github.tonivade.zeromock.api.RequestHandler;
 import com.github.tonivade.zeromock.api.Responses;
-import com.github.tonivade.zeromock.core.Handler1;
-import com.github.tonivade.zeromock.core.InmutableList;
+import com.github.tonivade.zeromock.core.Consumer1;
+import com.github.tonivade.zeromock.core.Function1;
+import com.github.tonivade.zeromock.core.Function2;
+import com.github.tonivade.zeromock.core.ImmutableList;
+import com.github.tonivade.zeromock.core.Option;
+import com.github.tonivade.zeromock.core.Producer;
 import com.github.tonivade.zeromock.demo.domain.Book;
 import com.github.tonivade.zeromock.demo.domain.BooksService;
 
@@ -32,58 +33,65 @@ public class BooksAPI {
   }
 
   public RequestHandler findAll() {
-    return adapt(service::findAll)
-        .andThen(InmutableList::toList)
+    Producer<ImmutableList<Book>> findAll = service::findAll;
+    return findAll.asFunction()
+        .andThen(ImmutableList::toList)
         .andThen(json())
         .andThen(Responses::ok)
-        .andThen(contentJson())::handle;
+        .andThen(contentJson())::apply;
   }
 
   public RequestHandler update() {
-    return adapt(service::update).compose(getBookId(), getBookTitle())
+    Function2<Integer, String, Book> update = service::update;
+    return update.compose(getBookId(), getBookTitle())
         .liftTry()
         .map(json())
         .map(Responses::ok)
         .orElse(Responses::error)
-        .andThen(contentJson())::handle;
+        .andThen(contentJson())::apply;
   }
 
   public RequestHandler find() {
-    return adapt(adapt(service::find).compose(getBookId())::handle)
+    Function1<Integer, Option<Book>> find = service::find;
+    return find.compose(getBookId())
+        .liftOption()
+        .flatten()
         .map(json())
         .map(Responses::ok)
         .orElse(Responses::noContent)
-        .andThen(contentJson())::handle;
+        .andThen(contentJson())::apply;
   }
 
   public RequestHandler create() {
-    return adapt(service::create).compose(getBookTitle())
+    Function1<String, Book> create = service::create;
+    return create.compose(getBookTitle())
         .liftTry()
         .map(json())
         .map(Responses::created)
         .orElse(Responses::error)
-        .andThen(contentJson())::handle;
+        .andThen(contentJson())::apply;
   }
 
   public RequestHandler delete() {
+    Consumer1<Integer> delete = service::delete;
     return getBookId()
-        .andThen(adapt(service::delete))
+        .andThen(delete.asFunction())
         .liftTry()
         .map(empty())
         .map(Responses::ok)
         .orElse(Responses::error)
-        .andThen(contentJson())::handle;
+        .andThen(contentJson())::apply;
   }
 
-  private static Handler1<HttpRequest, Integer> getBookId() {
+  private static Function1<HttpRequest, Integer> getBookId() {
     return pathParam(1).andThen(asInteger());
   }
 
-  private static Handler1<HttpRequest, String> getBookTitle() {
+  private static Function1<HttpRequest, String> getBookTitle() {
     return body().andThen(asBook()).andThen(Book::title);
   }
 
-  private static Handler1<Bytes, Book> asBook() {
+  private static Function1<Bytes, Book> asBook() {
     return Deserializers.<Book>json(Book.class);
   }
 }

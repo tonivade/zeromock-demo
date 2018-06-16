@@ -9,7 +9,7 @@ import static java.util.stream.StreamSupport.stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.github.tonivade.zeromock.core.InmutableList;
+import com.github.tonivade.zeromock.core.ImmutableList;
 import com.github.tonivade.zeromock.core.Option;
 import com.github.tonivade.zeromock.demo.domain.Book;
 import com.github.tonivade.zeromock.demo.domain.BookRepository;
@@ -20,8 +20,8 @@ public class BookSpringDataRepository implements BookRepository {
   private BookDAO dao;
 
   @Override
-  public InmutableList<Book> findAll() {
-    return InmutableList.from(stream(dao.findAll().spliterator(), false).map(this::convert));
+  public ImmutableList<Book> findAll() {
+    return ImmutableList.from(stream(dao.findAll().spliterator(), false).map(this::convert));
   }
 
   @Override
