@@ -20,7 +20,7 @@ import com.github.tonivade.zeromock.core.Consumer1;
 import com.github.tonivade.zeromock.core.Function1;
 import com.github.tonivade.zeromock.core.Function2;
 import com.github.tonivade.zeromock.core.ImmutableList;
-import com.github.tonivade.zeromock.core.Option;
+import com.github.tonivade.zeromock.core.OptionHandler;
 import com.github.tonivade.zeromock.core.Producer;
 import com.github.tonivade.zeromock.demo.domain.Book;
 import com.github.tonivade.zeromock.demo.domain.BooksService;
@@ -33,8 +33,7 @@ public class BooksAPI {
   }
 
   public RequestHandler findAll() {
-    Producer<ImmutableList<Book>> findAll = service::findAll;
-    return findAll.asFunction()
+    return Producer.of(service::findAll).asFunction()
         .andThen(ImmutableList::toList)
         .andThen(json())
         .andThen(Responses::ok)
@@ -42,8 +41,7 @@ public class BooksAPI {
   }
 
   public RequestHandler update() {
-    Function2<Integer, String, Book> update = service::update;
-    return update.compose(getBookId(), getBookTitle())
+    return Function2.of(service::update).compose(getBookId(), getBookTitle())
         .liftTry()
         .map(json())
         .map(Responses::ok)
@@ -52,10 +50,7 @@ public class BooksAPI {
   }
 
   public RequestHandler find() {
-    Function1<Integer, Option<Book>> find = service::find;
-    return find.compose(getBookId())
-        .liftOption()
-        .flatten()
+    return OptionHandler.of(service::find).compose(getBookId())
         .map(json())
         .map(Responses::ok)
         .orElse(Responses::noContent)
@@ -63,8 +58,7 @@ public class BooksAPI {
   }
 
   public RequestHandler create() {
-    Function1<String, Book> create = service::create;
-    return create.compose(getBookTitle())
+    return Function1.of(service::create).compose(getBookTitle())
         .liftTry()
         .map(json())
         .map(Responses::created)
@@ -73,9 +67,8 @@ public class BooksAPI {
   }
 
   public RequestHandler delete() {
-    Consumer1<Integer> delete = service::delete;
     return getBookId()
-        .andThen(delete.asFunction())
+        .andThen(Consumer1.of(service::delete).asFunction())
         .liftTry()
         .map(empty())
         .map(Responses::ok)
