@@ -4,8 +4,8 @@
  */
 package com.github.tonivade.zeromock.demo.domain;
 
-import com.github.tonivade.zeromock.core.ImmutableList;
-import com.github.tonivade.zeromock.core.Option;
+import com.github.tonivade.purefun.data.ImmutableList;
+import com.github.tonivade.purefun.type.Option;
 
 public class BooksService {
   

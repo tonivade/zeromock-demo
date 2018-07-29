@@ -9,8 +9,8 @@ import static java.util.stream.StreamSupport.stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.github.tonivade.zeromock.core.ImmutableList;
-import com.github.tonivade.zeromock.core.Option;
+import com.github.tonivade.purefun.data.ImmutableList;
+import com.github.tonivade.purefun.type.Option;
 import com.github.tonivade.zeromock.demo.domain.Book;
 import com.github.tonivade.zeromock.demo.domain.BookRepository;
 
