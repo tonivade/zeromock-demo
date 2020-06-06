@@ -4,20 +4,23 @@
  */
 package com.github.tonivade.zeromock.demo.repository;
 
-import static java.util.stream.StreamSupport.stream;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import com.github.tonivade.purefun.data.ImmutableList;
 import com.github.tonivade.purefun.type.Option;
 import com.github.tonivade.zeromock.demo.domain.Book;
 import com.github.tonivade.zeromock.demo.domain.BookRepository;
+import org.springframework.stereotype.Repository;
+
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.StreamSupport.stream;
 
 @Repository
 public class BookSpringDataRepository implements BookRepository {
-  @Autowired
-  private BookDAO dao;
+
+  private final BookDAO dao;
+
+  public BookSpringDataRepository(BookDAO dao) {
+    this.dao = requireNonNull(dao);
+  }
 
   @Override
   public ImmutableList<Book> findAll() {

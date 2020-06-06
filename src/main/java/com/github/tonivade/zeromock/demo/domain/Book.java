@@ -4,11 +4,16 @@
  */
 package com.github.tonivade.zeromock.demo.domain;
 
+import com.github.tonivade.purefun.Equal;
+
 import static java.util.Objects.requireNonNull;
 
 import java.util.Objects;
 
 public class Book {
+
+  private static final Equal<Book> EQUAL = Equal.<Book>of().comparing(x -> x.id).comparing(x -> x.title);
+
   private final Integer id;
   private final String title;
 
@@ -37,19 +42,6 @@ public class Book {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    Book other = (Book) obj;
-    if (!Objects.equals(other.id, this.id)) {
-      return false;
-    }
-    if (!Objects.equals(other.title, this.title)) {
-      return false;
-    }
-    return true;
+    return EQUAL.applyTo(this, obj);
   }
 }

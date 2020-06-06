@@ -9,8 +9,8 @@ import static com.github.tonivade.zeromock.api.Requests.delete;
 import static com.github.tonivade.zeromock.api.Requests.get;
 import static com.github.tonivade.zeromock.api.Requests.post;
 import static com.github.tonivade.zeromock.api.Requests.put;
-import static com.github.tonivade.zeromock.server.HttpClient.connectTo;
-import static java.util.Arrays.asList;
+import static com.github.tonivade.zeromock.client.HttpClient.connectTo;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Type;
@@ -44,7 +44,7 @@ public class BooksServiceTest {
     HttpResponse response = connectTo(STORE_URL).request(get("/books"));
     
     assertEquals(HttpStatus.OK, response.status());
-    assertEquals(asList(new Book(1, "title")), asBooks(response.body()));
+    assertEquals(singletonList(new Book(1, "title")), asBooks(response.body()));
   }
   
   @Test
@@ -95,15 +95,15 @@ public class BooksServiceTest {
   }
 
   private Bytes asJson(Book book) {
-    return Serializers.json().apply(book);
+    return Serializers.objectToJson().apply(book);
   }
 
   private Book asBook(Bytes body) {
-    return Deserializers.json(Book.class).apply(body);
+    return Deserializers.jsonToObject(Book.class).apply(body);
   }
 
   private List<Book> asBooks(Bytes body) {
-    return Deserializers.<List<Book>>json(listOfBooks()).apply(body);
+    return Deserializers.<List<Book>>jsonTo(listOfBooks()).apply(body);
   }
   
   private Type listOfBooks() {

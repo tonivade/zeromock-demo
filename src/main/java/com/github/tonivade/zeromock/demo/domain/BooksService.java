@@ -7,12 +7,14 @@ package com.github.tonivade.zeromock.demo.domain;
 import com.github.tonivade.purefun.data.ImmutableList;
 import com.github.tonivade.purefun.type.Option;
 
+import static java.util.Objects.requireNonNull;
+
 public class BooksService {
   
   private final BookRepository repository;
   
   public BooksService(BookRepository repository) {
-    this.repository = repository;
+    this.repository = requireNonNull(repository);
   }
 
   public ImmutableList<Book> findAll() {
