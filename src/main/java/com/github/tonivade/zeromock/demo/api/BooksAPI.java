@@ -70,9 +70,7 @@ public class BooksAPI {
     return getBookId()
         .andThen(Consumer1.of(service::delete).asFunction())
         .liftTry()
-        .andThen(x -> x.map(objectToJson()))
-        .andThen(x -> x.map(Responses::ok))
-        .andThen(x -> x.getOrElse(Responses::error))
+        .andThen(x -> x.fold(Responses::error, Function1.cons(Responses.ok())))
         .andThen(contentJson())::apply;
   }
 
